@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-List<Color> POSSIBLE_COLORS = [
+const List<Color> POSSIBLE_COLORS = [
   Colors.deepPurpleAccent,
   Colors.cyanAccent,
   Colors.amberAccent,
@@ -36,17 +36,14 @@ class MyApp extends StatelessWidget {
 
 void colorsInit(List<int> assignedColors) {
   for (var i = 0; i < 4; i++) {
-    assignedColors.add(Random.secure().nextInt(3));
+    assignedColors.add(Random().nextInt(3));
   }
 
   checksOnButtons.clear();
   for (int i = 0; i < ASSIGNED_COLORS.length; i++) {
     checksOnButtons.add(Text("Inizio Gioco"));
   }
-  print(assignedColors);
 }
-
-void changeButtonColor() {}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -65,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Giusto!!!"),
-          content: Text("Hai indovinato i colori!!!!!!!!!!!!!!!!"),
+          title: const Text("Giusto!!"),
+          content: Text("Hai indovinato i colori!"),
           actions: <Widget>[
             TextButton(
               child: const Text("OK"),
@@ -94,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (buttonCounter[i] >= 4) {
                   buttonCounter[i] = 0;
                 }
-                print(buttonCounter);
               });
             },
           ),
@@ -139,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 checksOnButtons[i] =
                     buttonCounter.elementAt(i) == ASSIGNED_COLORS.elementAt(i)
                     ? Text("Giusto")
-                    :  Text("Sbagliato");
+                    : Text("Sbagliato");
             }
             });
           }
