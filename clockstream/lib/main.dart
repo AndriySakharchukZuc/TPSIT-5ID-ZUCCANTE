@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
 }
+enum StatoOrologio { START, STOP, RESET }
 
 Stream<int> orologio(Stream<int> oscillatore) async* {
   int seconds = 0;
   await for (final s in oscillatore) {
-    yield seconds += 30;
+    yield seconds += 1;
   }
 }
 
@@ -42,35 +43,31 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-enum StatoOrologio { START, STOP, RESET }
-
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool _isPaused = false;
   StreamSubscription<int>? _subscription;
 
   StatoOrologio _statoOrologio1 = StatoOrologio.RESET;
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
-  }
 
   void _modificaStatoOrologio1() {
     setState(() {
       switch (_statoOrologio1) {
         case StatoOrologio.START:
+          _isPaused = false;
           _statoOrologio1 = StatoOrologio.STOP;
           _subscription?.cancel();
           _subscription = null;
           break;
         case StatoOrologio.STOP:
+          _isPaused = false;
           _statoOrologio1 = StatoOrologio.RESET;
           _subscription?.cancel();
           _subscription = null;
           _counter = 0;
           break;
         case StatoOrologio.RESET:
+          _isPaused = false;
           _statoOrologio1 = StatoOrologio.START;
           final stream = orologio(ticker(const Duration(seconds: 1)));
           _subscription = stream.listen((seconds) {
@@ -80,6 +77,20 @@ class _MyHomePageState extends State<MyHomePage> {
           });
           break;
       }
+    });
+  }
+
+  void _modificaStatoPauseResume(){
+    if (_statoOrologio1 != StatoOrologio.START) return;
+    setState(() {
+      _isPaused = !_isPaused;
+
+      if(_isPaused){
+        _subscription?.pause();
+      } else {
+        _subscription?.resume();
+      }
+
     });
   }
 
@@ -93,6 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return const Icon(Icons.play_arrow);
     }
   }
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +125,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _modificaStatoOrologio1,
-        tooltip: _statoOrologio1.name,
-        child: _iconaOrologio1(),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _modificaStatoOrologio1,
+            child: _iconaOrologio1(),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton(
+            onPressed: _modificaStatoPauseResume,
+            child: _isPaused ? Icon(Icons.play_arrow) : Icon(Icons.pause),
+            
+          ),
+        ],
       ),
     );
   }
