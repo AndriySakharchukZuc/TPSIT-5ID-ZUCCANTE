@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Andriy Sakharchuk clockstream'),
+      home: const MyHomePage(title: 'A.S. Clockstream'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
