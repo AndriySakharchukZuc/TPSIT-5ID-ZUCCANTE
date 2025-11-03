@@ -5,20 +5,24 @@ void main() {
   runApp(const MyApp());
 }
 enum StatoOrologio { START, STOP, RESET }
-
+bool _isPaused = false;
 Stream<int> orologio(Stream<int> oscillatore) async* {
   int seconds = 0;
-  await for (final s in oscillatore) {
-    yield seconds += 1;
+    await for (final s in oscillatore) {
+      if(!_isPaused) {
+        yield seconds += 1;
+      }
   }
 }
 
 Stream<int> ticker(Duration interval) async* {
   while (true) {
     await Future.delayed(interval);
+    print(1);
     yield 1;
   }
 }
+final Stream<int> finalTicker = ticker(const Duration(seconds: 1)).asBroadcastStream();
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -46,7 +50,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  bool _isPaused = false;
   StreamSubscription<int>? _subscription;
 
   StatoOrologio _statoOrologio1 = StatoOrologio.RESET;
@@ -70,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case StatoOrologio.RESET:
           _isPaused = false;
           _statoOrologio1 = StatoOrologio.START;
-          final stream = orologio(ticker(const Duration(seconds: 1)));
+          final stream = orologio(finalTicker);
           _subscription = stream.listen((seconds) {
             setState(() {
               _counter = seconds;
