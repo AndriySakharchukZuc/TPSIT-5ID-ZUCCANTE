@@ -1,10 +1,11 @@
+// client.dart
 import 'dart:io';
 
 late Socket socket;
 
 void main() {
   Socket.connect("localhost", 3000).then(
-    (Socket sock) {
+        (Socket sock) {
       socket = sock;
       socket.listen(
         dataHandler,
@@ -19,7 +20,7 @@ void main() {
     },
   );
   stdin.listen(
-    (data) => socket.write(String.fromCharCodes(data).trim() + '\n'),
+        (data) => socket.write(String.fromCharCodes(data).trim() + '\n'),
   );
 }
 

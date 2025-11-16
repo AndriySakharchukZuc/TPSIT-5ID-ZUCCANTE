@@ -1,3 +1,4 @@
+// main.dart
 import 'dart:io';
 
 late ServerSocket server;
@@ -16,13 +17,14 @@ void main() {
 void handleConnection(Socket client) {
   print(
     'Connection from '
-    '${client.remoteAddress.address}:${client.remotePort}',
+        '${client.remoteAddress.address}:${client.remotePort}',
   );
   clients.add(ChatClient(client));
   client.write(
     "Welcome to dart-chat! "
-    "There are ${clients.length - 1} other clients\n",
+        "There are ${clients.length - 1} other clients\n",
   );
+  client.write("Please enter your nickname:\n");
 }
 
 void removeClient(ChatClient client) {
@@ -41,6 +43,7 @@ class ChatClient {
   late Socket _socket;
   String? _address;
   int? _port;
+  String? nickname;
 
   ChatClient(Socket s) {
     _socket = s;
@@ -55,8 +58,13 @@ class ChatClient {
   }
 
   void messageHandler(data) {
-    String message = String.fromCharCodes(data).trim();
-    distributeMessage(this, '${_address}:${_port} Message: $message');
+    String msg = String.fromCharCodes(data).trim();
+    if (nickname == null) {
+      nickname = msg;
+    } else {
+      String sender = nickname ?? '${_address}:${_port}';
+      distributeMessage(this, '$sender Message: $msg');
+    }
   }
 
   void errorHandler(error) {

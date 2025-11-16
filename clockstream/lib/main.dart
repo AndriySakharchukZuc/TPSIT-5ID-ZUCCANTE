@@ -108,8 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
         return const Icon(Icons.play_arrow);
     }
   }
-  
-  
 
   @override
   Widget build(BuildContext context) {
