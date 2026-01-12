@@ -4,6 +4,12 @@ void main() {
   runApp(const MyApp());
 }
 
+final _titleController = TextEditingController();
+final _descController = TextEditingController();
+
+
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -29,12 +35,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  void addTaskDialog(){
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Text("Add new task"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Add a title"
+                  ),
+                ),
+                TextField(
+                  controller: _descController,
+                  decoration: const InputDecoration(
+                      border:  OutlineInputBorder(),
+                      hintText: "Add a description"
+                  ),
+                )
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                  onPressed: null, //TODO implement a saving (creating) a task with infos from text controllers
+                  child: const Text("Save")
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -48,19 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: .center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: addTaskDialog,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
   }
 }
+
+
