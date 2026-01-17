@@ -1,19 +1,5 @@
 class Task {
-  final int id;
-  final String title;
-  final String descriprion;
+  Task({required this.name, required this.completed});
+  String name;
   bool completed;
-
-  Task({
-    required this.id,
-    required this.title,
-    required this.descriprion,
-    required this.completed,
-  });
-
-  @override
-  String toString() {
-    return "$id $title $descriprion $completed";
-  }
 }
-

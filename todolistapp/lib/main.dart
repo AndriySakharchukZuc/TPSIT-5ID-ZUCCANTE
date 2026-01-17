@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:todolistapp/models/task.dart';
+import 'package:todolistapp/utils/notifier.dart';
+import 'package:provider/provider.dart';
+import 'package:todolistapp/widgets/todo_item.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-final _titleController = TextEditingController();
-final _descController = TextEditingController();
-
-
-
+List<Task> tasks = [];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,10 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      home: ChangeNotifierProvider(
+        create: (notifier) => TasksListNotifier(),
+        child: const MyHomePage(title: 'Tasks list'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -35,68 +36,57 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void addTaskDialog(){
+  final _titleController = TextEditingController();
 
-    showDialog(
-        context: context,
-        builder: (context){
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: const Text("Add new task"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Add a title"
-                  ),
-                ),
-                TextField(
-                  controller: _descController,
-                  decoration: const InputDecoration(
-                      border:  OutlineInputBorder(),
-                      hintText: "Add a description"
-                  ),
-                )
-              ],
+  Future<void> _displayCreatingDialog(TasksListNotifier tln) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Add a task'),
+          content: TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(hintText: 'Add a title'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                tln.addTask(_titleController.text);
+                _titleController.clear();
+              },
+              child: const Text('Add'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                  onPressed: null, //TODO implement a saving (creating) a task with infos from text controllers
-                  child: const Text("Save")
-              ),
-            ],
-          );
-        });
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final TasksListNotifier notifier = context.watch<TasksListNotifier>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-          ],
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          itemCount: notifier.length,
+          itemBuilder: (context, index) {
+            Task task = notifier.getTask(index);
+            return TaskItem(task: task);
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: addTaskDialog,
-        tooltip: 'Increment',
+        onPressed: () => _displayCreatingDialog(notifier),
+        tooltip: 'Add task',
         child: const Icon(Icons.add),
       ),
     );
   }
 }
-
-
