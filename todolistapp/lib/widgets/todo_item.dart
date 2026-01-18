@@ -3,10 +3,30 @@ import 'package:provider/provider.dart';
 import 'package:todolistapp/models/task.dart';
 import 'package:todolistapp/utils/notifier.dart';
 
-class TaskItem extends StatelessWidget {
+class TaskItem extends StatefulWidget {
   TaskItem({required this.task}) : super(key: ObjectKey(task));
 
   final Task task;
+  @override
+  State<TaskItem> createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
+  // final TasksListNotifier notifier = context.watch<TasksListNotifier>();
+  final TextEditingController controller = TextEditingController();
+  bool enabled = false;
+
+  @override
+  void initState() {
+    controller.text = widget.task.name;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   TextStyle? _getTextStyle(bool checked) {
     if (!checked) return null;
@@ -19,30 +39,35 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TasksListNotifier notifier = context.watch<TasksListNotifier>();
-    final TextEditingController controller = TextEditingController();
-    controller.text = task.name;
-    bool enabled = true;
 
-    return Row(
-      children: [
-        Checkbox(
-          value: task.completed,
-          onChanged: (value) {
-            notifier.changeTask(task);
-          },
-        ),
-        Expanded(
-          child: TextField(
-            controller: controller,
-            enabled: enabled,
-            decoration: const InputDecoration(hintText: 'add a task'),
-            onSubmitted: (value) {
-              notifier.changeTaskName(task, value);
-              enabled = false;
+    return GestureDetector(
+      onTap: () => setState(() => enabled = true),
+      onLongPress: () => notifier.deleteTask(widget.task),
+      child: Row(
+        children: [
+          Checkbox(
+            value: widget.task.completed,
+            onChanged: (value) {
+              notifier.changeTask(widget.task);
             },
           ),
-        ),
-      ],
+          Expanded(
+            child: TextField(
+              controller: controller,
+              enabled: enabled,
+              decoration: const InputDecoration(
+                hintText: 'add a task',
+                border: InputBorder.none,
+              ),
+              onSubmitted: (value) {
+                notifier.changeTaskName(widget.task, value);
+                setState(() => enabled = false);
+              },
+              style: _getTextStyle(widget.task.completed),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
