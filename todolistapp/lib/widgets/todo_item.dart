@@ -19,16 +19,30 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TasksListNotifier notifier = context.watch<TasksListNotifier>();
+    final TextEditingController controller = TextEditingController();
+    controller.text = task.name;
+    bool enabled = true;
 
-    return ListTile(
-      onTap: () {
-        notifier.changeTask(task);
-      },
-      onLongPress: () {
-        notifier.deleteTask(task);
-      },
-      leading: CircleAvatar(child: Text(task.name)),
-      title: Text(task.name, style: _getTextStyle(task.completed)),
+    return Row(
+      children: [
+        Checkbox(
+          value: task.completed,
+          onChanged: (value) {
+            notifier.changeTask(task);
+          },
+        ),
+        Expanded(
+          child: TextField(
+            controller: controller,
+            enabled: enabled,
+            decoration: const InputDecoration(hintText: 'add a task'),
+            onSubmitted: (value) {
+              notifier.changeTaskName(task, value);
+              enabled = false;
+            },
+          ),
+        ),
+      ],
     );
   }
 }

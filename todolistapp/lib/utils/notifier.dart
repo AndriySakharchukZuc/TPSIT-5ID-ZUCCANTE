@@ -5,13 +5,18 @@ class TasksListNotifier with ChangeNotifier {
   final _tasks = <Task>[];
   int get length => _tasks.length;
 
-  void addTask(String name) {
-    _tasks.add(Task(name: name, completed: false));
+  void addTask() {
+    _tasks.add(Task(name: '', completed: false));
     notifyListeners();
   }
 
   void changeTask(Task task) {
     task.completed = !task.completed;
+    notifyListeners();
+  }
+
+  void changeTaskName(Task task, String nTitle) {
+    task.name = nTitle;
     notifyListeners();
   }
 

@@ -38,31 +38,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _titleController = TextEditingController();
 
-  Future<void> _displayCreatingDialog(TasksListNotifier tln) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          title: const Text('Add a task'),
-          content: TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(hintText: 'Add a title'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                tln.addTask(_titleController.text);
-                _titleController.clear();
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final TasksListNotifier notifier = context.watch<TasksListNotifier>();
@@ -83,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _displayCreatingDialog(notifier),
+        onPressed: () => notifier.addTask(),
         tooltip: 'Add task',
         child: const Icon(Icons.add),
       ),
