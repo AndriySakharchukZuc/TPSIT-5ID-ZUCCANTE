@@ -6,7 +6,7 @@ class TasksListNotifier with ChangeNotifier {
   int get length => _tasks.length;
 
   void addTask() {
-    _tasks.add(Task(name: '', completed: false));
+    _tasks.add(Task(id: _tasks.length + 1, name: '', completed: false));
     notifyListeners();
   }
 
