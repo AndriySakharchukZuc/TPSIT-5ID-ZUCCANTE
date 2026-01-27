@@ -12,6 +12,7 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+  // final TasksListNotifier notifier = context.watch<TasksListNotifier>();
   final TextEditingController controller = TextEditingController();
   bool enabled = false;
 
@@ -30,7 +31,7 @@ class _TaskItemState extends State<TaskItem> {
   TextStyle? _getTextStyle(bool checked) {
     if (!checked) return null;
     return const TextStyle(
-      color: Colors.black54,
+      color: Colors.black,
       decoration: TextDecoration.lineThrough,
     );
   }
@@ -41,6 +42,7 @@ class _TaskItemState extends State<TaskItem> {
 
     return GestureDetector(
       onTap: () => setState(() => enabled = true),
+      onLongPress: () => notifier.deleteTask(widget.task),
       child: Row(
         children: [
           Checkbox(
@@ -63,13 +65,6 @@ class _TaskItemState extends State<TaskItem> {
               },
               style: _getTextStyle(widget.task.completed),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.close, size: 18),
-            onPressed: () => notifier.deleteTask(widget.task),
-            padding: const EdgeInsets.all(4),
-            constraints: const BoxConstraints(),
-            color: Colors.grey,
           ),
         ],
       ),

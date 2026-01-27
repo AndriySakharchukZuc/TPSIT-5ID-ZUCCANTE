@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:todolistapp/models/task.dart';
 import 'package:todolistapp/utils/notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:todolistapp/widgets/todo_card.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:todolistapp/widgets/todo_item.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+List<Task> tasks = [];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,15 +16,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Todo Cards App',
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
       home: ChangeNotifierProvider(
-        create: (context) => TasksListNotifier(),
-        child: const MyHomePage(title: 'Todo Cards'),
+        create: (notifier) => TasksListNotifier(),
+        child: const MyHomePage(title: 'Tasks list'),
       ),
     );
   }
@@ -37,6 +36,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _titleController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final TasksListNotifier notifier = context.watch<TasksListNotifier>();
@@ -46,27 +47,19 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: notifier.cardsLength == 0
-          ? Center(
-              child: Text(
-                'Tap + to add a card',
-                style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
-              ),
-            )
-          : MasonryGridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              padding: const EdgeInsets.all(8.0),
-              itemCount: notifier.cardsLength,
-              itemBuilder: (context, index) {
-                final card = notifier.getCard(index);
-                return TaskCard(card: card);
-              },
-            ),
+      body: Center(
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          itemCount: notifier.length,
+          itemBuilder: (context, index) {
+            Task task = notifier.getTask(index);
+            return TaskItem(task: task);
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => notifier.addCard(),
-        tooltip: 'Add card',
+        onPressed: () => notifier.addTask(),
+        tooltip: 'Add task',
         child: const Icon(Icons.add),
       ),
     );
