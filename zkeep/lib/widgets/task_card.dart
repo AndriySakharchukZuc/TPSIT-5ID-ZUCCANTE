@@ -48,7 +48,6 @@ class _TaskCardState extends State<TaskCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Title
           Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -87,8 +86,6 @@ class _TaskCardState extends State<TaskCard> {
               ],
             ),
           ),
-
-          // Tasks
           ...widget.card.tasks.map(
             (task) => TaskItem(
               task: task,
@@ -97,8 +94,6 @@ class _TaskCardState extends State<TaskCard> {
               onChanged: widget.onChanged,
             ),
           ),
-
-          // Add Task Button
           TextButton.icon(
             onPressed: () {
               widget.notifier.addTask(widget.card);
