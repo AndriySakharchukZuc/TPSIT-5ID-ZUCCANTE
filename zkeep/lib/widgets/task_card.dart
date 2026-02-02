@@ -50,7 +50,7 @@ class _TaskCardState extends State<TaskCard> {
         children: [
           // Title
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
                 Expanded(
