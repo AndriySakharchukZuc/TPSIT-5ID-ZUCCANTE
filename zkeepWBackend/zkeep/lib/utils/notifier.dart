@@ -22,7 +22,7 @@ class CardsNotifier {
       newCard.serverId = serverCard.serverId;
       await DatabaseHelper.updateCard(newCard);
     } catch (e) {
-      print('Offline mode (this is OK): $e');
+      print('Error: $e');
     }
   }
 
