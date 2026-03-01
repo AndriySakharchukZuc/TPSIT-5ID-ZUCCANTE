@@ -35,24 +35,20 @@ class ApiService {
     }
 
     var data = json.decode(response.body);
-    print('Server returned ID: ${data['id']}');
 
     return CardModel(id: 0, serverId: data['id'], title: data['title'] ?? '');
   }
 
   static Future<void> deleteCard(int serverId) async {
-    print('Deleting card with ID: $serverId from $baseUrl/cards/$serverId');
     final response = await http
         .delete(Uri.parse("$baseUrl/cards/$serverId"))
         .timeout(Duration(seconds: 5));
-    print('Delete response: ${response.statusCode}');
     if (response.statusCode != 200) {
       throw Exception('Failed to delete from DB: ${response.body}');
     }
   }
 
   static Future<void> updateCard(CardModel card) async {
-    print('Server ID: ${card.serverId}');
     final response = await http
         .put(
           Uri.parse('$baseUrl/cards/${card.serverId}'),
