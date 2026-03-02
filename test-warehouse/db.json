@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/json-server/schema.json",
+  "products": [
+    { "name": "prodotto1",
+      "description": "descrizione prodotto 1",
+      "category": 1,
+      "price": 100,
+      "n": 1
+    },
+    { "name": "prodotto2",
+      "description": "descrizione prodotto 2",
+      "category": 2,
+      "price": 200,
+      "n": 2
+    },
+    { "name": "prodotto3",
+      "description": "descrizione prodotto 3",
+      "category": 3,
+      "price": 300,
+      "n": 10
+    }
+  ]
+}
