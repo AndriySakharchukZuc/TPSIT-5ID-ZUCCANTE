@@ -46,7 +46,7 @@ Two tables for server databases are used: Cards and Tasks.
 
 Table structures:
 
-<iframe width="560" height="315" src='https://dbdiagram.io/e/69a71872a3f0aa31e1b08341/69a7197da3f0aa31e1b0a024'> </iframe>
+https://dbdiagram.io/e/69a71872a3f0aa31e1b08341/69a7197da3f0aa31e1b0a024
 
 All interactions are defined in `backend\internal\storage\storage.go` interfaces, and in `backend\internal\storage\postgres` are the implementations of those interfaces.
 
@@ -69,7 +69,7 @@ Two models are used in the application:
 
 `db/helper.dart` contains a local database helper for the app. It's used for saving user notes inside the internal storage and not volatile one. The structure of tables is different than on backend side:
 
-<iframe width="560" height="315" src='https://dbdiagram.io/e/69a7242fa3f0aa31e1b1c252/69a72543a3f0aa31e1b1e13e'> </iframe>
+https://dbdiagram.io/e/69a7242fa3f0aa31e1b1c252/69a72543a3f0aa31e1b1e13e
 
 ### Utils
 
