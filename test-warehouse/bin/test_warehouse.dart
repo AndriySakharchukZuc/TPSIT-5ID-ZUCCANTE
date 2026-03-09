@@ -6,8 +6,9 @@ void main() async {
   var url = Uri.parse("http://127.0.0.0:3000/products");
   var response = await http.get(url);
   print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
-  var response2 = await http.post(url, body: jsonEncode({'name' : "covtun", 'description' : "kotul", "category" : 4, "price" : 3, "n" : 2}));
-  print('Response status: ${response2.statusCode}');
-  print('Response body: ${response2.body}');
+  //print('Response body: ${response.body}');
+  final List<dynamic> data = json.decode(response.body);
+  for(var d in data){
+    print(d);
+  }
 }
