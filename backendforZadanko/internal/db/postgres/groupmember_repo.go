@@ -24,6 +24,6 @@ func (r *groupMemberRepository) Delete(groupID string, userID string) error {
 
 func (r *groupMemberRepository) GetByGroupID(groupID string) ([]*entity.GroupMember, error) {
 	var groupMembers []*entity.GroupMember
-	err := r.db.Where("group_id = ?", groupID).Find(&groupMembers).Error
+	err := r.db.Preload("User").Where("group_id = ?", groupID).Find(&groupMembers).Error
 	return groupMembers, err
 }

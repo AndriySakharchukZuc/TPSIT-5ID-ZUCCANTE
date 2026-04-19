@@ -47,6 +47,22 @@ func (s *TaskService) Update(taskID string, input dto.UpdateTaskRequest) (*entit
 		return nil, err
 	}
 
+	if input.Title != "" {
+		task.Title = input.Title
+	}
+	if input.Description != "" {
+		task.Description = input.Description
+	}
+	if input.Status != "" {
+		task.Status = input.Status
+	}
+	if input.AssignedTo != nil {
+		task.AssignedTo = input.AssignedTo
+	}
+	if input.DueAt != nil {
+		task.DueAt = input.DueAt
+	}
+
 	if err := s.taskRepo.Update(task); err != nil {
 		return nil, err
 	}

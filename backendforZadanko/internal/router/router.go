@@ -31,6 +31,7 @@ func Setup(
 		api.GET("/groups", groupHandler.GetAll)
 		api.POST("/groups/join", groupHandler.Join)
 		api.POST("/groups/:id/members", groupMemberHandler.Add)
+		api.GET("/groups/:id/members", groupMemberHandler.GetByGroup)
 		api.DELETE("/groups/:id/members/:userId", groupMemberHandler.Remove)
 
 		api.POST("/groups/:id/tasks", taskHandler.Create)

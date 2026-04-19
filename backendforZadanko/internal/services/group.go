@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/sha256"
 	"fmt"
+	"time"
 	"zadanko/internal/dto"
 	"zadanko/internal/entity"
 	"zadanko/internal/repository"
@@ -26,10 +27,11 @@ func (s *GroupService) Create(userID string, input dto.CreateGroupRequest) (*ent
 	}
 
 	member := &entity.GroupMember{
-		ID:      fmt.Sprintf("%s-%s", input.ID, userID),
-		GroupID: input.ID,
-		UserID:  userID,
-		Role:    "owner",
+		ID:       fmt.Sprintf("%s-%s", input.ID, userID),
+		GroupID:  input.ID,
+		UserID:   userID,
+		Role:     "owner",
+		JoinedAt: time.Now(),
 	}
 
 	if err := s.groupRepo.CreateWithOwner(group, member); err != nil {
@@ -50,10 +52,11 @@ func (s *GroupService) Join(userID string, input dto.JoinGroupRequest) error {
 	}
 
 	member := &entity.GroupMember{
-		ID:      input.ID,
-		GroupID: group.ID,
-		UserID:  userID,
-		Role:    "member",
+		ID:       input.ID,
+		GroupID:  group.ID,
+		UserID:   userID,
+		Role:     "member",
+		JoinedAt: time.Now(),
 	}
 
 	return s.groupMemberRepo.Create(member)

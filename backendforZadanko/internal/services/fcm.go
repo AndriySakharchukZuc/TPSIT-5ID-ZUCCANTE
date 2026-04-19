@@ -85,7 +85,7 @@ func (s *FcmService) sendNotification(token string, task *entity.Task) {
 	msg := &messaging.Message{
 		Token: token,
 		Notification: &messaging.Notification{
-			Title: "Новая задача",
+			Title: "New Task",
 			Body:  task.Title,
 		},
 		Data: map[string]string{

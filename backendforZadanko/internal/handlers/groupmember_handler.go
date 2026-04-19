@@ -37,3 +37,15 @@ func (h *GroupMemberHandler) Remove(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "member removed"})
 }
+
+func (h *GroupMemberHandler) GetByGroup(c *gin.Context) {
+	groupID := c.Param("id")
+
+	members, err := h.groupMemberService.GetByGroupID(groupID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, members)
+}

@@ -39,7 +39,7 @@ type GroupMember struct {
 	JoinedAt time.Time `json:"joined_at"`
 
 	Group Group `json:"-" gorm:"foreignKey:GroupID;references:ID;constraint:OnDelete:CASCADE"` //GroupID -> Group.ID
-	User  User  `json:"-" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`  //UserID -> User.ID
+	User  User  `json:"user" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`  //UserID -> User.ID
 }
 
 type Task struct {

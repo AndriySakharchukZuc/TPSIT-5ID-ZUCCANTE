@@ -24,3 +24,7 @@ func (s *GroupMemberService) Add(groupID string, userID string) error {
 func (s *GroupMemberService) Remove(groupID string, userID string) error {
 	return s.groupMemberRepo.Delete(groupID, userID)
 }
+
+func (s *GroupMemberService) GetByGroupID(groupID string) ([]*entity.GroupMember, error) {
+	return s.groupMemberRepo.GetByGroupID(groupID)
+}

@@ -1,61 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:zadanko/screens/login_page.dart';
+import 'package:zadanko/screens/group_list_page.dart';
+import 'package:zadanko/db/database_helper.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final dbHelper = DatabaseHelper();
+  final String? token = await dbHelper.getSession('token');
+  
+  runApp(MyApp(isLoggedIn: token != null && token.isNotEmpty));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const LoginScreen(),
-    );
-  }
-}
-
-class LoginNotifier extends ChangeNotifier {}
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 48, 50, 50),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 40),
-                Text(
-                  'Hello',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 42,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -1,
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  'Login into your account',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.4),
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      title: 'Zadanko',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: isLoggedIn ? const GroupListPage() : const LoginScreen(),
     );
   }
 }
