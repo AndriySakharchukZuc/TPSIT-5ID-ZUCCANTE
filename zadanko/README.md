@@ -1,16 +1,22 @@
-# zadanko
+# Zadanko
 
-A new Flutter project.
+## Features
 
-## Getting Started
+- JWT Authentication: Secure login and registration system.
+- Group Management: Create and view task groups.
+- Task Tracking: Detailed task management within group contexts.
+- Local Storage: SQLite integration for session and data persistence.
+- Dynamic Configuration: Adjustable API endpoints via application settings.
 
-This project is a starting point for a Flutter application.
+## Technical Stack
 
-A few resources to get you started if this is your first Flutter project:
+- Database: sqflite (SQLite)
+- Communication: http
+- Security: jwt_decoder, uuid
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Directory Layout
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- lib/api: Logic for backend service interaction.
+- lib/db: Local database helpers and session management.
+- lib/models: Data classes for users, groups, and tasks.
+- lib/screens: UI implementations for the application flow.
