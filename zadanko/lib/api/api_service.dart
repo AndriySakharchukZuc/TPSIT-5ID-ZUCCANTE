@@ -7,10 +7,13 @@ import '../models/task.dart';
 import '../models/group_member.dart';
 
 class ApiService {
-  static const String _baseUrl = 'http://192.168.1.4:8080';
   static const _uuid = Uuid();
-
   final _db = DatabaseHelper();
+
+  Future<String> get _baseUrl async {
+    final url = await _db.getSession('endpoint');
+    return url ?? 'http://192.168.1.4:8080';
+  }
 
   Future<Map<String, String>> _headers({bool auth = true}) async {
     final headers = {'Content-Type': 'application/json'};
@@ -29,7 +32,7 @@ class ApiService {
 
   Future<void> register(String username, String email, String password) async {
     final res = await http.post(
-      Uri.parse('$_baseUrl/auth/register'),
+      Uri.parse('${await _baseUrl}/auth/register'),
       headers: await _headers(auth: false),
       body: jsonEncode({
         'id': _uuid.v4(),
@@ -43,7 +46,7 @@ class ApiService {
 
   Future<void> login(String email, String password) async {
     final res = await http.post(
-      Uri.parse('$_baseUrl/auth/login'),
+      Uri.parse('${await _baseUrl}/auth/login'),
       headers: await _headers(auth: false),
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -63,7 +66,7 @@ class ApiService {
 
   Future<List<Group>> getGroups() async {
     final res = await http.get(
-      Uri.parse('$_baseUrl/groups'),
+      Uri.parse('${await _baseUrl}/groups'),
       headers: await _headers(),
     );
     _check(res, [200]);
@@ -74,7 +77,7 @@ class ApiService {
 
   Future<void> createGroup(String name) async {
     final res = await http.post(
-      Uri.parse('$_baseUrl/groups'),
+      Uri.parse('${await _baseUrl}/groups'),
       headers: await _headers(),
       body: jsonEncode({'id': _uuid.v4(), 'name': name}),
     );
@@ -83,16 +86,16 @@ class ApiService {
 
   Future<void> joinGroup(String inviteCode) async {
     final res = await http.post(
-      Uri.parse('$_baseUrl/groups/join'),
+      Uri.parse('${await _baseUrl}/groups/join'),
       headers: await _headers(),
-      body: jsonEncode({'invite_code': inviteCode}),
+      body: jsonEncode({'id': _uuid.v4(), 'invite_code': inviteCode}),
     );
     _check(res, [200, 201]);
   }
 
   Future<void> leaveGroup(String groupId, String userId) async {
     final res = await http.delete(
-      Uri.parse('$_baseUrl/groups/$groupId/members/$userId'),
+      Uri.parse('${await _baseUrl}/groups/$groupId/members/$userId'),
       headers: await _headers(),
     );
     _check(res, [200]);
@@ -100,7 +103,7 @@ class ApiService {
 
   Future<List<Task>> getTasks(String groupId) async {
     final res = await http.get(
-      Uri.parse('$_baseUrl/groups/$groupId/tasks'),
+      Uri.parse('${await _baseUrl}/groups/$groupId/tasks'),
       headers: await _headers(),
     );
     _check(res, [200]);
@@ -111,7 +114,7 @@ class ApiService {
 
   Future<void> createTask(String groupId, String title) async {
     final res = await http.post(
-      Uri.parse('$_baseUrl/groups/$groupId/tasks'),
+      Uri.parse('${await _baseUrl}/groups/$groupId/tasks'),
       headers: await _headers(),
       body: jsonEncode({'id': _uuid.v4(), 'title': title, 'description': ''}),
     );
@@ -120,7 +123,7 @@ class ApiService {
 
   Future<void> updateTaskStatus(String taskId, String status) async {
     final res = await http.patch(
-      Uri.parse('$_baseUrl/tasks/$taskId'),
+      Uri.parse('${await _baseUrl}/tasks/$taskId'),
       headers: await _headers(),
       body: jsonEncode({'status': status}),
     );
@@ -129,7 +132,7 @@ class ApiService {
 
   Future<void> deleteTask(String taskId) async {
     final res = await http.delete(
-      Uri.parse('$_baseUrl/tasks/$taskId'),
+      Uri.parse('${await _baseUrl}/tasks/$taskId'),
       headers: await _headers(),
     );
     _check(res, [200, 204]);
@@ -137,7 +140,7 @@ class ApiService {
 
   Future<List<GroupMember>> getMembers(String groupId) async {
     final res = await http.get(
-      Uri.parse('$_baseUrl/groups/$groupId/members'),
+      Uri.parse('${await _baseUrl}/groups/$groupId/members'),
       headers: await _headers(),
     );
     _check(res, [200]);
