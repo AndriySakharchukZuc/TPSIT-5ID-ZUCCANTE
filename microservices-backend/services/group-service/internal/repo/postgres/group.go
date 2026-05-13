@@ -13,7 +13,7 @@ func NewGroupRepository(db *gorm.DB) *groupRepository {
 	return &groupRepository{db: db}
 }
 
-func (r *groupRepository) Create(group *models.Group, member *models.GroupMember) error {
+func (r *groupRepository) CreateWithOwner(group *models.Group, member *models.GroupMember) error {
 	return r.db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(group).Error; err != nil {
 			return err

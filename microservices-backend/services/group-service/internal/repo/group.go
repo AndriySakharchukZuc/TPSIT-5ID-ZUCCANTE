@@ -2,8 +2,8 @@ package repo
 
 import "github.com/AndriySakharchukZuc/microservice-api/group-service/internal/models"
 
-type GroupRepostiory interface {
-	Create(group *models.Group, member *models.GroupMember) error
+type GroupRepository interface {
+	CreateWithOwner(group *models.Group, member *models.GroupMember) error
 	GetByID(id string) (*models.Group, error)
 	GetByOwner(ownerid string) ([]*models.Group, error)
 	GetByInviteCode(code string) (*models.Group, error)
