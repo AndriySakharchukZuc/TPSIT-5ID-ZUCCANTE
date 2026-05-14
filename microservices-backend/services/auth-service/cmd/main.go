@@ -22,7 +22,7 @@ func main() {
 
 	r := gin.Default()
 
-	v1 := r.Group("/api/v1")
+	v1 := r.Group("/api/v1/auth")
 	{
 		v1.POST("/register", authHandler.Register)
 		v1.POST("/login", authHandler.Login)

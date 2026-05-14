@@ -7,14 +7,14 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o group-service ./cmd/main.go
+RUN go build -o api-gateway ./cmd/main.go
 
 FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=builder /app/group-service .
+COPY --from=builder /app/api-gateway .
 
-EXPOSE 8081
+EXPOSE 8000
 
-CMD ["./group-service"]
+CMD ["./api-gateway"]

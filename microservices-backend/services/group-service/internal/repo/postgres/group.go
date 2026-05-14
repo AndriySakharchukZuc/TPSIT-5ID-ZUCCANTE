@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"github.com/AndriySakharchukZuc/microservice-api/group-service/internal/models"
+	"github.com/AndriySakharchukZuc/microservice-api/group-service/internal/repo"
 	"gorm.io/gorm"
 )
 
@@ -9,7 +10,7 @@ type groupRepository struct {
 	db *gorm.DB
 }
 
-func NewGroupRepository(db *gorm.DB) *groupRepository {
+func NewGroupRepository(db *gorm.DB) repo.GroupRepository {
 	return &groupRepository{db: db}
 }
 
